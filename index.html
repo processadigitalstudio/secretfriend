@@ -459,6 +459,7 @@
       <p class="gate-title">¿Quién eres tú? 🙋</p>
       <p class="gate-sub">Elige tu nombre — esto se guarda solo en tu celular/computador, nunca se envía a ningún lado.</p>
       <div class="gate-grid" id="gateMeGrid"></div>
+      <button class="gate-back" id="skipGateBtn">Solo quiero ver los tableros (sin identificarme) →</button>
     </div>
   </div>
 
@@ -708,6 +709,8 @@ function showGateFriend(me){
 
 gateBackBtn.addEventListener('click', showGateMe);
 
+document.getElementById('skipGateBtn').addEventListener('click', showLanding);
+
 function showHome(identity){
   hideAllViews();
   homeHello.textContent = 'Hola, ' + identity.me + ' 👋';
@@ -819,10 +822,11 @@ async function loadNotes(){
     return;
   }
   try {
+    // Nota: solo filtramos por "board" aquí (sin orderBy en la consulta) para
+    // no depender de un índice compuesto en Firestore. Ordenamos en el navegador.
     const q = fs.query(
       fs.collection(db, 'mensajes'),
-      fs.where('board', '==', currentBoard),
-      fs.orderBy('timestamp', 'desc')
+      fs.where('board', '==', currentBoard)
     );
     const snap = await fs.getDocs(q);
     const items = snap.docs.map(d => {
@@ -835,9 +839,11 @@ async function loadNotes(){
         timestamp: data.timestamp && data.timestamp.toDate ? data.timestamp.toDate().toISOString() : null,
       };
     });
+    items.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
     renderNotes(items);
   } catch (err) {
-    notesEl.innerHTML = '<div class="empty-state">No se pudieron cargar los mensajes.</div>';
+    console.error('Error cargando mensajes:', err);
+    notesEl.innerHTML = '<div class="empty-state">No se pudieron cargar los mensajes. (' + (err && err.code ? err.code : 'revisa las reglas de Firestore') + ')</div>';
   }
 }
 
