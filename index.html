@@ -56,22 +56,6 @@
     padding:36px 16px 10px;
     position:relative;
   }
-  .id-fab{
-    position:absolute;
-    top:env(safe-area-inset-top,0px);
-    right:16px;
-    margin-top:14px;
-    font-family:var(--font-body);
-    font-weight:600;
-    font-size:0.78rem;
-    padding:8px 14px;
-    border-radius:999px;
-    border:1.5px solid rgba(92,42,62,.2);
-    background:#fff;
-    color:var(--wine);
-    cursor:pointer;
-  }
-  .id-fab:hover{background:var(--blush);}
   .kicker{
     font-family:var(--font-hand);
     font-size:1.4rem;
@@ -96,10 +80,6 @@
   main{max-width:920px; margin:0 auto; padding:20px 16px 60px;}
 
   /* ---------- LANDING GRID ---------- */
-  #view-landing{display:none;}
-  #view-gate-me{display:none;}
-  #view-gate-friend{display:none;}
-  #view-home{display:none;}
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
@@ -335,130 +315,6 @@
 
   @media (max-width:480px){
     .grid{grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));}
-    .id-fab{
-      position:static;
-      display:inline-block;
-      margin:0 auto 14px;
-    }
-  }
-
-  /* ---------- GATE (identificación) ---------- */
-  .gate-card{
-    max-width:520px;
-    margin:10px auto 0;
-    background:var(--paper);
-    border:1px solid rgba(92,42,62,.12);
-    border-radius:20px;
-    padding:26px 22px;
-    box-shadow:0 10px 26px rgba(92,42,62,.1);
-    text-align:center;
-  }
-  .gate-title{
-    font-family:var(--font-hand);
-    font-size:1.9rem;
-    color:var(--wine);
-    margin:0 0 4px;
-  }
-  .gate-sub{
-    color:var(--dim);
-    font-size:0.88rem;
-    margin:0 0 18px;
-  }
-  .gate-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
-    gap:10px;
-  }
-  .gate-chip{
-    font-family:var(--font-body);
-    font-weight:600;
-    font-size:0.9rem;
-    padding:10px 8px;
-    border-radius:12px;
-    border:1.5px solid rgba(92,42,62,.16);
-    background:#fff;
-    color:var(--wine);
-    cursor:pointer;
-    transition:background .12s ease, color .12s ease, transform .1s ease;
-  }
-  .gate-chip:hover{transform:translateY(-2px); border-color:var(--coral);}
-  .gate-chip.selected{
-    background:var(--wine);
-    color:#fff;
-    border-color:var(--wine);
-  }
-  .gate-back{
-    display:inline-block;
-    margin-top:16px;
-    font-size:0.8rem;
-    color:var(--dim);
-    background:none;
-    border:none;
-    cursor:pointer;
-    text-decoration:underline;
-  }
-
-  /* ---------- HOME (identidad ya guardada) ---------- */
-  .home-card{
-    max-width:520px;
-    margin:10px auto 0;
-    background:linear-gradient(160deg, var(--paper), var(--blush));
-    border-radius:22px;
-    padding:32px 24px;
-    text-align:center;
-    box-shadow:0 12px 30px rgba(92,42,62,.14);
-  }
-  .home-hello{
-    color:var(--dim);
-    font-size:0.95rem;
-    margin:0 0 2px;
-  }
-  .home-friend-label{
-    color:var(--dim);
-    font-size:0.85rem;
-    margin:14px 0 2px;
-  }
-  .home-friend-name{
-    font-family:var(--font-hand);
-    font-size:2.6rem;
-    color:var(--coral-dark);
-    margin:0 0 20px;
-  }
-  .home-actions{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    align-items:center;
-  }
-  .home-btn{
-    font-family:var(--font-body);
-    font-weight:700;
-    font-size:0.95rem;
-    padding:13px 26px;
-    border-radius:14px;
-    border:none;
-    cursor:pointer;
-    width:100%;
-    max-width:320px;
-  }
-  .home-btn.primary{
-    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
-    color:#fff;
-    box-shadow:0 8px 18px rgba(232,84,69,.32);
-  }
-  .home-btn.secondary{
-    background:#fff;
-    color:var(--wine);
-    border:1.5px solid rgba(92,42,62,.18);
-  }
-  .home-switch{
-    margin-top:18px;
-    font-size:0.78rem;
-    color:var(--dim);
-    background:none;
-    border:none;
-    text-decoration:underline;
-    cursor:pointer;
   }
 </style>
 </head>
@@ -469,47 +325,14 @@
 </div>
 
 <header>
-  <button class="id-fab" id="idFabBtn">🙋 Identificarme</button>
   <span class="kicker">Semana de Amor y Amistad</span>
   <h1>Amigo Secreto 💌</h1>
-  <p class="sub">Deja pistas, canciones o fotos para tu amigo secreto — nadie sabe quién eres 🕵️</p>
+  <p class="sub">Elige a la persona y déjale una pista, canción o mensaje — todo anónimo 🕵️</p>
 </header>
 
 <main>
 
-  <div id="view-gate-me">
-    <div class="gate-card">
-      <p class="gate-title">¿Quién eres tú? 🙋</p>
-      <p class="gate-sub">Elige tu nombre — esto se guarda solo en tu celular/computador, nunca se envía a ningún lado.</p>
-      <div class="gate-grid" id="gateMeGrid"></div>
-      <button class="gate-back" id="skipGateBtn">Solo quiero ver los tableros (sin identificarme) →</button>
-    </div>
-  </div>
-
-  <div id="view-gate-friend">
-    <div class="gate-card">
-      <p class="gate-title">¿A quién tienes de amigo secreto? 🤫</p>
-      <p class="gate-sub">Elige a esa persona. Esto queda guardado solo aquí, en tu dispositivo — nadie más lo ve.</p>
-      <div class="gate-grid" id="gateFriendGrid"></div>
-      <button class="gate-back" id="gateBackBtn">← No soy yo, volver</button>
-    </div>
-  </div>
-
-  <div id="view-home">
-    <div class="home-card">
-      <p class="home-hello" id="homeHello"></p>
-      <p class="home-friend-label">Tu amigo secreto es</p>
-      <p class="home-friend-name" id="homeFriendName"></p>
-      <div class="home-actions">
-        <button class="home-btn primary" id="goToFriendBtn">Ir a su tablero 💌</button>
-        <button class="home-btn secondary" id="browseAllBtn">Ver todos los tableros</button>
-      </div>
-      <button class="home-switch" id="homeSwitchBtn">No soy yo / cambiar identidad</button>
-    </div>
-  </div>
-
   <div id="view-landing">
-    <button class="back-btn" id="landingHomeBtn" style="display:none; margin-bottom:8px;">← Volver a mi inicio</button>
     <div class="grid" id="grid"></div>
   </div>
 
@@ -544,7 +367,7 @@
 
 </main>
 
-<footer>Todo es anónimo 🤫 — solo tú sabes qué escribiste.</footer>
+<footer>Todo es anónimo 🤫 — nadie sabe quién escribió qué.</footer>
 
 <script>
 // ======= CONFIGURA AQUÍ TU BACKEND (Firebase) =======
@@ -597,21 +420,6 @@ const PARTICIPANTS = [
 let currentBoard = null;
 let currentType = "pista";
 let pendingImage = null; // { dataUrl }
-let cameFromHome = false; // controls where the board's "back" button returns to
-
-const STORAGE_KEY = 'amigoSecreto_identidad';
-
-const viewGateMe = document.getElementById('view-gate-me');
-const viewGateFriend = document.getElementById('view-gate-friend');
-const viewHome = document.getElementById('view-home');
-const gateMeGrid = document.getElementById('gateMeGrid');
-const gateFriendGrid = document.getElementById('gateFriendGrid');
-const gateBackBtn = document.getElementById('gateBackBtn');
-const homeHello = document.getElementById('homeHello');
-const homeFriendName = document.getElementById('homeFriendName');
-const goToFriendBtn = document.getElementById('goToFriendBtn');
-const browseAllBtn = document.getElementById('browseAllBtn');
-const homeSwitchBtn = document.getElementById('homeSwitchBtn');
 
 const grid = document.getElementById('grid');
 const viewLanding = document.getElementById('view-landing');
@@ -631,30 +439,21 @@ if (!firebaseReady) {
   configBanner.classList.add('show');
 }
 
-function hideAllViews(){
-  viewGateMe.style.display = 'none';
-  viewGateFriend.style.display = 'none';
-  viewHome.style.display = 'none';
-  viewLanding.style.display = 'none';
-  viewBoard.style.display = 'none';
-}
-
 function renderGrid(){
   grid.innerHTML = '';
   PARTICIPANTS.forEach(name => {
     const div = document.createElement('div');
     div.className = 'envelope';
     div.innerHTML = `<div class="seal">💌</div><div class="name">${name}</div>`;
-    div.addEventListener('click', () => openBoard(name, false));
+    div.addEventListener('click', () => openBoard(name));
     grid.appendChild(div);
   });
 }
 
-function openBoard(name, fromHome){
+function openBoard(name){
   currentBoard = name;
-  cameFromHome = !!fromHome;
   boardNameEl.textContent = 'Para ' + name;
-  hideAllViews();
+  viewLanding.style.display = 'none';
   viewBoard.style.display = 'block';
   window.scrollTo({top:0, behavior:'smooth'});
   loadNotes();
@@ -663,96 +462,8 @@ function openBoard(name, fromHome){
 backBtn.addEventListener('click', () => {
   currentBoard = null;
   clearComposer();
-  const identity = getIdentity();
-  if (cameFromHome && identity){
-    showHome(identity);
-  } else {
-    showLanding();
-  }
-});
-
-function showLanding(){
-  hideAllViews();
-  const identity = getIdentity();
-  const landingHomeBtn = document.getElementById('landingHomeBtn');
-  if (identity){
-    landingHomeBtn.style.display = 'inline-block';
-    landingHomeBtn.onclick = () => showHome(identity);
-  } else {
-    landingHomeBtn.style.display = 'none';
-  }
+  viewBoard.style.display = 'none';
   viewLanding.style.display = 'block';
-}
-
-function getIdentity(){
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch(e){ return null; }
-}
-
-function saveIdentity(me, friend){
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ me: me, friend: friend }));
-  } catch(e){ /* localStorage no disponible, seguimos sin guardar */ }
-}
-
-function clearIdentity(){
-  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
-}
-
-function showGateMe(){
-  hideAllViews();
-  gateMeGrid.innerHTML = '';
-  PARTICIPANTS.forEach(name => {
-    const btn = document.createElement('button');
-    btn.className = 'gate-chip';
-    btn.textContent = name;
-    btn.addEventListener('click', () => showGateFriend(name));
-    gateMeGrid.appendChild(btn);
-  });
-  viewGateMe.style.display = 'block';
-}
-
-function showGateFriend(me){
-  hideAllViews();
-  gateFriendGrid.innerHTML = '';
-  PARTICIPANTS.forEach(name => {
-    const btn = document.createElement('button');
-    btn.className = 'gate-chip';
-    btn.textContent = name;
-    btn.addEventListener('click', () => {
-      saveIdentity(me, name);
-      showHome({ me: me, friend: name });
-    });
-    gateFriendGrid.appendChild(btn);
-  });
-  viewGateFriend.style.display = 'block';
-}
-
-gateBackBtn.addEventListener('click', showGateMe);
-
-document.getElementById('skipGateBtn').addEventListener('click', showLanding);
-
-document.getElementById('idFabBtn').addEventListener('click', showGateMe);
-
-function showHome(identity){
-  hideAllViews();
-  homeHello.textContent = 'Hola, ' + identity.me + ' 👋';
-  homeFriendName.textContent = identity.friend;
-  viewHome.style.display = 'block';
-}
-
-goToFriendBtn.addEventListener('click', () => {
-  const identity = getIdentity();
-  if (identity) openBoard(identity.friend, true);
-});
-
-browseAllBtn.addEventListener('click', showLanding);
-
-homeSwitchBtn.addEventListener('click', () => {
-  clearIdentity();
-  showGateMe();
 });
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -872,7 +583,6 @@ async function loadNotes(){
   }
 }
 
-
 function renderNotes(items){
   if (!items.length){
     notesEl.innerHTML = '<div class="empty-state">Nadie ha escrito nada todavía. ¡Sé el primero! 💌</div>';
@@ -906,14 +616,6 @@ function formatDate(ts){
 }
 
 renderGrid();
-
-const savedIdentity = getIdentity();
-if (savedIdentity && savedIdentity.me && savedIdentity.friend){
-  showHome(savedIdentity);
-} else {
-  showGateMe();
-}
-
 initFirebase();
 </script>
 </body>
