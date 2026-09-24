@@ -338,14 +338,15 @@
       <button class="back-btn" id="backBtn">← Volver</button>
     </div>
     <h2 class="board-name" id="boardName"></h2>
-    <p class="board-hint">Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.</p>
+    <p class="board-hint" id="boardHint">Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.</p>
+    <button class="back-btn" id="viewOnlyToggle" style="padding-left:0;">👁️ Solo ver (sin escribir) →</button>
 
     <div class="tabs">
       <button class="tab-btn active" data-type="pista">🔍 Pistas</button>
       <button class="tab-btn" data-type="mensaje">💌 Mensajes libres</button>
     </div>
 
-    <div class="composer">
+    <div class="composer" id="composer">
       <textarea id="textInput" placeholder="Escribe tu mensaje o pista aquí..."></textarea>
       <div class="composer-row">
         <input type="text" id="linkInput" placeholder="Link de canción o imagen (opcional)">
@@ -422,6 +423,10 @@ const grid = document.getElementById('grid');
 const viewLanding = document.getElementById('view-landing');
 const viewBoard = document.getElementById('view-board');
 const boardNameEl = document.getElementById('boardName');
+const boardHint = document.getElementById('boardHint');
+const composerBox = document.getElementById('composer');
+const viewOnlyToggle = document.getElementById('viewOnlyToggle');
+let viewOnlyMode = false;
 const notesEl = document.getElementById('notes');
 const textInput = document.getElementById('textInput');
 const linkInput = document.getElementById('linkInput');
@@ -452,9 +457,26 @@ function openBoard(name){
   boardNameEl.textContent = 'Para ' + name;
   viewLanding.style.display = 'none';
   viewBoard.style.display = 'block';
+  setViewOnly(false);
   window.scrollTo({top:0, behavior:'smooth'});
   loadNotes();
 }
+
+function setViewOnly(on){
+  viewOnlyMode = on;
+  if (on){
+    composerBox.style.display = 'none';
+    boardHint.textContent = 'Esto es lo que le han dejado hasta ahora 👀';
+    viewOnlyToggle.textContent = '✏️ Quiero escribir algo →';
+  } else {
+    composerBox.style.display = 'block';
+    boardHint.textContent = 'Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.';
+    viewOnlyToggle.textContent = '👁️ Solo ver (sin escribir) →';
+  }
+}
+
+viewOnlyToggle.addEventListener('click', () => setViewOnly(!viewOnlyMode));
+
 
 backBtn.addEventListener('click', () => {
   currentBoard = null;
