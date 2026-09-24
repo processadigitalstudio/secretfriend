@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amigo Secreto — Amor y Amistad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine:#5C2A3E;
+    --wine-dark:#3E1B2A;
+    --coral:#FF6B5B;
+    --coral-dark:#E85445;
+    --gold:#F2A649;
+    --blush:#FFE3D9;
+    --cream:#FFF9F5;
+    --paper:#FFFDF8;
+    --ink:#3A2430;
+    --dim:#8B6B76;
+    --font-hand:'Caveat', cursive;
+    --font-body:'Inter', system-ui, sans-serif;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(circle at 10% -5%, var(--blush) 0%, transparent 40%),
+      radial-gradient(circle at 100% 0%, #FFD9CE 0%, transparent 45%),
+      var(--cream);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+
+  .config-banner{
+    background:var(--wine-dark);
+    color:#ffe9df;
+    font-size:0.82rem;
+    text-align:center;
+    padding:10px 16px;
+    display:none;
+  }
+  .config-banner code{background:rgba(255,255,255,.12); padding:2px 6px; border-radius:5px;}
+  .config-banner.show{display:block;}
+
+  header{
+    text-align:center;
+    padding:36px 16px 10px;
+  }
+  .kicker{
+    font-family:var(--font-hand);
+    font-size:1.4rem;
+    color:var(--coral-dark);
+    display:block;
+    margin-bottom:2px;
+  }
+  h1{
+    font-family:var(--font-hand);
+    font-weight:700;
+    font-size:clamp(2.4rem, 8vw, 4rem);
+    margin:0;
+    color:var(--wine);
+    line-height:1;
+  }
+  .sub{
+    color:var(--dim);
+    font-size:0.95rem;
+    margin:10px 0 0;
+  }
+
+  main{max-width:920px; margin:0 auto; padding:20px 16px 60px;}
+
+  /* ---------- LANDING GRID ---------- */
+  #view-landing{display:none;}
+  #view-gate-me{display:none;}
+  #view-gate-friend{display:none;}
+  #view-home{display:none;}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:16px;
+    margin-top:20px;
+  }
+  .envelope{
+    background:var(--paper);
+    border:1px solid rgba(92,42,62,.12);
+    border-radius:4px;
+    padding:22px 14px 18px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    box-shadow:0 6px 16px rgba(92,42,62,.08);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .envelope::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:0;
+    border-left:75px solid transparent;
+    border-right:75px solid transparent;
+    border-top:38px solid var(--blush);
+  }
+  .envelope:hover{transform:translateY(-3px) rotate(-1deg); box-shadow:0 12px 24px rgba(92,42,62,.16);}
+  .envelope .seal{
+    width:30px; height:30px;
+    margin:6px auto 10px;
+    border-radius:50%;
+    background:linear-gradient(145deg, var(--coral), var(--coral-dark));
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem;
+    color:#fff;
+    box-shadow:0 3px 6px rgba(0,0,0,.2);
+  }
+  .envelope .name{
+    font-family:var(--font-hand);
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--wine);
+  }
+
+  /* ---------- BOARD VIEW ---------- */
+  #view-board{display:none;}
+  .board-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .back-btn{
+    background:none;
+    border:none;
+    color:var(--coral-dark);
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    padding:6px 4px;
+  }
+  .board-name{
+    font-family:var(--font-hand);
+    font-size:2.4rem;
+    color:var(--wine);
+    margin:0 0 4px;
+  }
+  .board-hint{
+    color:var(--dim);
+    font-size:0.88rem;
+    margin:0 0 18px;
+  }
+
+  .tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .tab-btn{
+    flex:1;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.88rem;
+    padding:11px 10px;
+    border-radius:12px;
+    border:1.5px solid rgba(92,42,62,.15);
+    background:var(--paper);
+    color:var(--wine);
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .tab-btn.active{
+    background:var(--wine);
+    color:#fff;
+    border-color:var(--wine);
+  }
+
+  .composer{
+    background:var(--paper);
+    border:1.5px dashed rgba(255,107,91,.4);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:26px;
+  }
+  .composer textarea{
+    width:100%;
+    border:none;
+    background:transparent;
+    resize:vertical;
+    min-height:70px;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    color:var(--ink);
+    outline:none;
+  }
+  .composer textarea::placeholder{color:#b79aa4;}
+  .composer-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+    align-items:center;
+  }
+  .composer-row input[type=text]{
+    flex:1;
+    min-width:160px;
+    padding:9px 12px;
+    border-radius:10px;
+    border:1px solid rgba(92,42,62,.18);
+    font-family:var(--font-body);
+    font-size:0.85rem;
+    outline:none;
+  }
+  .file-btn{
+    font-size:0.82rem;
+    padding:9px 12px;
+    border-radius:10px;
+    border:1px solid rgba(92,42,62,.18);
+    background:#fff;
+    cursor:pointer;
+    color:var(--wine);
+  }
+  .file-btn input{display:none;}
+  .img-preview{
+    max-height:70px;
+    border-radius:8px;
+    display:none;
+    margin-top:8px;
+  }
+  .send-btn{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.9rem;
+    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:12px;
+    cursor:pointer;
+    margin-left:auto;
+    box-shadow:0 6px 14px rgba(232,84,69,.35);
+  }
+  .send-btn:disabled{opacity:.5; cursor:default;}
+  .status-msg{
+    font-size:0.8rem;
+    color:var(--dim);
+    margin-top:8px;
+    min-height:1em;
+  }
+
+  .notes{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .note{
+    background:var(--paper);
+    border-radius:4px;
+    padding:16px 18px;
+    box-shadow:0 4px 12px rgba(92,42,62,.08);
+    border-left:4px solid var(--gold);
+    position:relative;
+  }
+  .note.pista{border-left-color:var(--coral-dark);}
+  .note-tag{
+    font-family:var(--font-hand);
+    font-size:1.05rem;
+    color:var(--coral-dark);
+    margin-bottom:4px;
+    display:block;
+  }
+  .note-text{
+    font-size:0.95rem;
+    line-height:1.5;
+    white-space:pre-wrap;
+  }
+  .note-link{
+    display:inline-block;
+    margin-top:8px;
+    font-size:0.85rem;
+    color:var(--wine);
+    font-weight:600;
+    text-decoration:none;
+    border-bottom:1.5px solid var(--coral);
+  }
+  .note img{
+    display:block;
+    max-width:100%;
+    max-height:280px;
+    object-fit:contain;
+    border-radius:10px;
+    margin-top:10px;
+  }
+  .note-time{
+    font-size:0.72rem;
+    color:#b79aa4;
+    margin-top:8px;
+  }
+  .empty-state{
+    text-align:center;
+    color:var(--dim);
+    font-size:0.9rem;
+    padding:30px 10px;
+  }
+
+  footer{
+    text-align:center;
+    padding:10px 16px 40px;
+    color:var(--dim);
+    font-size:0.78rem;
+  }
+
+  @media (max-width:480px){
+    .grid{grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));}
+  }
+
+  /* ---------- GATE (identificación) ---------- */
+  .gate-card{
+    max-width:520px;
+    margin:10px auto 0;
+    background:var(--paper);
+    border:1px solid rgba(92,42,62,.12);
+    border-radius:20px;
+    padding:26px 22px;
+    box-shadow:0 10px 26px rgba(92,42,62,.1);
+    text-align:center;
+  }
+  .gate-title{
+    font-family:var(--font-hand);
+    font-size:1.9rem;
+    color:var(--wine);
+    margin:0 0 4px;
+  }
+  .gate-sub{
+    color:var(--dim);
+    font-size:0.88rem;
+    margin:0 0 18px;
+  }
+  .gate-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
+    gap:10px;
+  }
+  .gate-chip{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    padding:10px 8px;
+    border-radius:12px;
+    border:1.5px solid rgba(92,42,62,.16);
+    background:#fff;
+    color:var(--wine);
+    cursor:pointer;
+    transition:background .12s ease, color .12s ease, transform .1s ease;
+  }
+  .gate-chip:hover{transform:translateY(-2px); border-color:var(--coral);}
+  .gate-chip.selected{
+    background:var(--wine);
+    color:#fff;
+    border-color:var(--wine);
+  }
+  .gate-back{
+    display:inline-block;
+    margin-top:16px;
+    font-size:0.8rem;
+    color:var(--dim);
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* ---------- HOME (identidad ya guardada) ---------- */
+  .home-card{
+    max-width:520px;
+    margin:10px auto 0;
+    background:linear-gradient(160deg, var(--paper), var(--blush));
+    border-radius:22px;
+    padding:32px 24px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(92,42,62,.14);
+  }
+  .home-hello{
+    color:var(--dim);
+    font-size:0.95rem;
+    margin:0 0 2px;
+  }
+  .home-friend-label{
+    color:var(--dim);
+    font-size:0.85rem;
+    margin:14px 0 2px;
+  }
+  .home-friend-name{
+    font-family:var(--font-hand);
+    font-size:2.6rem;
+    color:var(--coral-dark);
+    margin:0 0 20px;
+  }
+  .home-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+  }
+  .home-btn{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.95rem;
+    padding:13px 26px;
+    border-radius:14px;
+    border:none;
+    cursor:pointer;
+    width:100%;
+    max-width:320px;
+  }
+  .home-btn.primary{
+    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color:#fff;
+    box-shadow:0 8px 18px rgba(232,84,69,.32);
+  }
+  .home-btn.secondary{
+    background:#fff;
+    color:var(--wine);
+    border:1.5px solid rgba(92,42,62,.18);
+  }
+  .home-switch{
+    margin-top:18px;
+    font-size:0.78rem;
+    color:var(--dim);
+    background:none;
+    border:none;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="config-banner" id="configBanner">
+  ⚠️ Falta configurar el backend — abre index.html y reemplaza <code>firebaseConfig</code> con los datos de tu proyecto de Firebase (línea marcada al final del archivo).
+</div>
+
+<header>
+  <span class="kicker">Semana de Amor y Amistad</span>
+  <h1>Amigo Secreto 💌</h1>
+  <p class="sub">Deja pistas, canciones o fotos para tu amigo secreto — nadie sabe quién eres 🕵️</p>
+</header>
+
+<main>
+
+  <div id="view-gate-me">
+    <div class="gate-card">
+      <p class="gate-title">¿Quién eres tú? 🙋</p>
+      <p class="gate-sub">Elige tu nombre — esto se guarda solo en tu celular/computador, nunca se envía a ningún lado.</p>
+      <div class="gate-grid" id="gateMeGrid"></div>
+    </div>
+  </div>
+
+  <div id="view-gate-friend">
+    <div class="gate-card">
+      <p class="gate-title">¿A quién tienes de amigo secreto? 🤫</p>
+      <p class="gate-sub">Elige a esa persona. Esto queda guardado solo aquí, en tu dispositivo — nadie más lo ve.</p>
+      <div class="gate-grid" id="gateFriendGrid"></div>
+      <button class="gate-back" id="gateBackBtn">← No soy yo, volver</button>
+    </div>
+  </div>
+
+  <div id="view-home">
+    <div class="home-card">
+      <p class="home-hello" id="homeHello"></p>
+      <p class="home-friend-label">Tu amigo secreto es</p>
+      <p class="home-friend-name" id="homeFriendName"></p>
+      <div class="home-actions">
+        <button class="home-btn primary" id="goToFriendBtn">Ir a su tablero 💌</button>
+        <button class="home-btn secondary" id="browseAllBtn">Ver todos los tableros</button>
+      </div>
+      <button class="home-switch" id="homeSwitchBtn">No soy yo / cambiar identidad</button>
+    </div>
+  </div>
+
+  <div id="view-landing">
+    <button class="back-btn" id="landingHomeBtn" style="display:none; margin-bottom:8px;">← Volver a mi inicio</button>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div id="view-board">
+    <div class="board-top">
+      <button class="back-btn" id="backBtn">← Volver</button>
+    </div>
+    <h2 class="board-name" id="boardName"></h2>
+    <p class="board-hint">Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-type="pista">🔍 Pistas</button>
+      <button class="tab-btn" data-type="mensaje">💌 Mensajes libres</button>
+    </div>
+
+    <div class="composer">
+      <textarea id="textInput" placeholder="Escribe tu mensaje o pista aquí..."></textarea>
+      <div class="composer-row">
+        <input type="text" id="linkInput" placeholder="Link de canción o imagen (opcional)">
+        <label class="file-btn">
+          📎 Foto
+          <input type="file" id="fileInput" accept="image/*">
+        </label>
+        <button class="send-btn" id="sendBtn">Enviar</button>
+      </div>
+      <img class="img-preview" id="imgPreview">
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <div class="notes" id="notes"></div>
+  </div>
+
+</main>
+
+<footer>Todo es anónimo 🤫 — solo tú sabes qué escribiste.</footer>
+
+<script>
+// ======= CONFIGURA AQUÍ TU BACKEND (Firebase) =======
+const firebaseConfig = {
+  apiKey: "AIzaSyCm6Q3_jIQQ9WDPY9a5NFGsVQN50VMWEXw",
+  authDomain: "secretfriend-11f24.firebaseapp.com",
+  projectId: "secretfriend-11f24",
+  storageBucket: "secretfriend-11f24.firebasestorage.app",
+  messagingSenderId: "738537648144",
+  appId: "1:738537648144:web:3b32c66910534ca324da95"
+};
+// ======================================================
+
+const firebaseWanted = firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf('PEGA_AQUI') === -1;
+let firebaseReady = false;
+let db = null, storage = null;
+let fs = null, stg = null; // firestore/storage function namespaces, filled in once loaded
+
+async function initFirebase(){
+  if (!firebaseWanted) return;
+  try {
+    const [{ initializeApp }, firestoreMod, storageMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js"),
+    ]);
+    fs = firestoreMod;
+    stg = storageMod;
+    const app = initializeApp(firebaseConfig);
+    db = fs.getFirestore(app);
+    storage = stg.getStorage(app);
+    firebaseReady = true;
+  } catch (err) {
+    firebaseReady = false;
+    console.error('No se pudo cargar Firebase:', err);
+  }
+  if (!firebaseReady) {
+    configBanner.classList.add('show');
+  } else {
+    configBanner.classList.remove('show');
+  }
+}
+
+const PARTICIPANTS = [
+  "Yereidis", "Daniela", "Malena", "Liz", "Laura", "Verena", "Deisy",
+  "Katty", "Rafael", "Jonathan", "Marcos", "Idalides", "Jhon",
+  "Tatiana", "Anyi", "Lazaro", "Katherine", "Miguel", "Roxy"
+];
+
+let currentBoard = null;
+let currentType = "pista";
+let pendingImage = null; // { dataUrl }
+let cameFromHome = false; // controls where the board's "back" button returns to
+
+const STORAGE_KEY = 'amigoSecreto_identidad';
+
+const viewGateMe = document.getElementById('view-gate-me');
+const viewGateFriend = document.getElementById('view-gate-friend');
+const viewHome = document.getElementById('view-home');
+const gateMeGrid = document.getElementById('gateMeGrid');
+const gateFriendGrid = document.getElementById('gateFriendGrid');
+const gateBackBtn = document.getElementById('gateBackBtn');
+const homeHello = document.getElementById('homeHello');
+const homeFriendName = document.getElementById('homeFriendName');
+const goToFriendBtn = document.getElementById('goToFriendBtn');
+const browseAllBtn = document.getElementById('browseAllBtn');
+const homeSwitchBtn = document.getElementById('homeSwitchBtn');
+
+const grid = document.getElementById('grid');
+const viewLanding = document.getElementById('view-landing');
+const viewBoard = document.getElementById('view-board');
+const boardNameEl = document.getElementById('boardName');
+const notesEl = document.getElementById('notes');
+const textInput = document.getElementById('textInput');
+const linkInput = document.getElementById('linkInput');
+const fileInput = document.getElementById('fileInput');
+const imgPreview = document.getElementById('imgPreview');
+const sendBtn = document.getElementById('sendBtn');
+const statusMsg = document.getElementById('statusMsg');
+const backBtn = document.getElementById('backBtn');
+const configBanner = document.getElementById('configBanner');
+
+if (!firebaseReady) {
+  configBanner.classList.add('show');
+}
+
+function hideAllViews(){
+  viewGateMe.style.display = 'none';
+  viewGateFriend.style.display = 'none';
+  viewHome.style.display = 'none';
+  viewLanding.style.display = 'none';
+  viewBoard.style.display = 'none';
+}
+
+function renderGrid(){
+  grid.innerHTML = '';
+  PARTICIPANTS.forEach(name => {
+    const div = document.createElement('div');
+    div.className = 'envelope';
+    div.innerHTML = `<div class="seal">💌</div><div class="name">${name}</div>`;
+    div.addEventListener('click', () => openBoard(name, false));
+    grid.appendChild(div);
+  });
+}
+
+function openBoard(name, fromHome){
+  currentBoard = name;
+  cameFromHome = !!fromHome;
+  boardNameEl.textContent = 'Para ' + name;
+  hideAllViews();
+  viewBoard.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+  loadNotes();
+}
+
+backBtn.addEventListener('click', () => {
+  currentBoard = null;
+  clearComposer();
+  const identity = getIdentity();
+  if (cameFromHome && identity){
+    showHome(identity);
+  } else {
+    showLanding();
+  }
+});
+
+function showLanding(){
+  hideAllViews();
+  const identity = getIdentity();
+  const landingHomeBtn = document.getElementById('landingHomeBtn');
+  if (identity){
+    landingHomeBtn.style.display = 'inline-block';
+    landingHomeBtn.onclick = () => showHome(identity);
+  } else {
+    landingHomeBtn.style.display = 'none';
+  }
+  viewLanding.style.display = 'block';
+}
+
+function getIdentity(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ return null; }
+}
+
+function saveIdentity(me, friend){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ me: me, friend: friend }));
+  } catch(e){ /* localStorage no disponible, seguimos sin guardar */ }
+}
+
+function clearIdentity(){
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+}
+
+function showGateMe(){
+  hideAllViews();
+  gateMeGrid.innerHTML = '';
+  PARTICIPANTS.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'gate-chip';
+    btn.textContent = name;
+    btn.addEventListener('click', () => showGateFriend(name));
+    gateMeGrid.appendChild(btn);
+  });
+  viewGateMe.style.display = 'block';
+}
+
+function showGateFriend(me){
+  hideAllViews();
+  gateFriendGrid.innerHTML = '';
+  PARTICIPANTS.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'gate-chip';
+    btn.textContent = name;
+    btn.addEventListener('click', () => {
+      saveIdentity(me, name);
+      showHome({ me: me, friend: name });
+    });
+    gateFriendGrid.appendChild(btn);
+  });
+  viewGateFriend.style.display = 'block';
+}
+
+gateBackBtn.addEventListener('click', showGateMe);
+
+function showHome(identity){
+  hideAllViews();
+  homeHello.textContent = 'Hola, ' + identity.me + ' 👋';
+  homeFriendName.textContent = identity.friend;
+  viewHome.style.display = 'block';
+}
+
+goToFriendBtn.addEventListener('click', () => {
+  const identity = getIdentity();
+  if (identity) openBoard(identity.friend, true);
+});
+
+browseAllBtn.addEventListener('click', showLanding);
+
+homeSwitchBtn.addEventListener('click', () => {
+  clearIdentity();
+  showGateMe();
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentType = btn.getAttribute('data-type');
+  });
+});
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_W = 900;
+      let w = img.width, h = img.height;
+      if (w > MAX_W){ h = Math.round(h * MAX_W / w); w = MAX_W; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      pendingImage = { dataUrl: dataUrl };
+      imgPreview.src = dataUrl;
+      imgPreview.style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function clearComposer(){
+  textInput.value = '';
+  linkInput.value = '';
+  fileInput.value = '';
+  pendingImage = null;
+  imgPreview.style.display = 'none';
+  imgPreview.src = '';
+  statusMsg.textContent = '';
+}
+
+sendBtn.addEventListener('click', async () => {
+  const text = textInput.value.trim();
+  const link = linkInput.value.trim();
+  if (!text && !link && !pendingImage){
+    statusMsg.textContent = 'Escribe algo, agrega un link o una foto primero.';
+    return;
+  }
+  if (!firebaseReady){
+    statusMsg.textContent = 'Falta configurar el backend (ver aviso arriba).';
+    return;
+  }
+
+  sendBtn.disabled = true;
+  statusMsg.textContent = 'Enviando...';
+
+  try {
+    let imageUrl = "";
+    if (pendingImage){
+      statusMsg.textContent = 'Subiendo imagen...';
+      const imgRef = stg.ref(storage, 'amigo-secreto/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.jpg');
+      await stg.uploadString(imgRef, pendingImage.dataUrl, 'data_url');
+      imageUrl = await stg.getDownloadURL(imgRef);
+    }
+
+    statusMsg.textContent = 'Guardando...';
+    await fs.addDoc(fs.collection(db, 'mensajes'), {
+      board: currentBoard,
+      type: currentType,
+      text: text,
+      link: link,
+      imageUrl: imageUrl,
+      timestamp: fs.serverTimestamp(),
+    });
+
+    statusMsg.textContent = '¡Enviado! 💌';
+    clearComposer();
+    loadNotes();
+  } catch (err) {
+    statusMsg.textContent = 'No se pudo enviar: ' + (err && err.message ? err.message : 'revisa tu conexión o el backend.');
+  } finally {
+    sendBtn.disabled = false;
+  }
+});
+
+async function loadNotes(){
+  notesEl.innerHTML = '<div class="empty-state">Cargando...</div>';
+  if (!firebaseReady){
+    notesEl.innerHTML = '<div class="empty-state">Configura el backend para ver los mensajes.</div>';
+    return;
+  }
+  try {
+    const q = fs.query(
+      fs.collection(db, 'mensajes'),
+      fs.where('board', '==', currentBoard),
+      fs.orderBy('timestamp', 'desc')
+    );
+    const snap = await fs.getDocs(q);
+    const items = snap.docs.map(d => {
+      const data = d.data();
+      return {
+        text: data.text,
+        link: data.link,
+        imageUrl: data.imageUrl,
+        type: data.type,
+        timestamp: data.timestamp && data.timestamp.toDate ? data.timestamp.toDate().toISOString() : null,
+      };
+    });
+    renderNotes(items);
+  } catch (err) {
+    notesEl.innerHTML = '<div class="empty-state">No se pudieron cargar los mensajes.</div>';
+  }
+}
+
+
+function renderNotes(items){
+  if (!items.length){
+    notesEl.innerHTML = '<div class="empty-state">Nadie ha escrito nada todavía. ¡Sé el primero! 💌</div>';
+    return;
+  }
+  notesEl.innerHTML = '';
+  items.forEach(it => {
+    const div = document.createElement('div');
+    div.className = 'note' + (it.type === 'pista' ? ' pista' : '');
+    let html = `<span class="note-tag">${it.type === 'pista' ? '🔍 Pista' : '💌 Mensaje'}</span>`;
+    if (it.text) html += `<div class="note-text"></div>`;
+    if (it.link) html += `<a class="note-link" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">🎵 Ver / escuchar</a>`;
+    if (it.imageUrl) html += `<img src="${escapeAttr(it.imageUrl)}" alt="imagen">`;
+    if (it.timestamp) html += `<div class="note-time">${formatDate(it.timestamp)}</div>`;
+    div.innerHTML = html;
+    if (it.text) div.querySelector('.note-text').textContent = it.text;
+    notesEl.appendChild(div);
+  });
+}
+
+function escapeAttr(s){
+  return String(s).replace(/"/g, '&quot;');
+}
+
+function formatDate(ts){
+  try {
+    const d = new Date(ts);
+    return d.toLocaleDateString('es-CO', { day:'numeric', month:'short' }) + ' · ' +
+           d.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' });
+  } catch(e){ return ''; }
+}
+
+renderGrid();
+
+const savedIdentity = getIdentity();
+if (savedIdentity && savedIdentity.me && savedIdentity.friend){
+  showHome(savedIdentity);
+} else {
+  showGateMe();
+}
+
+initFirebase();
+</script>
+</body>
+</html>
