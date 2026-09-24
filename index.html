@@ -83,6 +83,32 @@
     gap:16px;
     margin-top:20px;
   }
+  .mode-picker{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .mode-btn{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    padding:12px 22px;
+    border-radius:14px;
+    border:1.5px solid rgba(92,42,62,.18);
+    background:var(--paper);
+    color:var(--wine);
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, transform .1s ease;
+  }
+  .mode-btn:hover{transform:translateY(-1px);}
+  .mode-btn.active{
+    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color:#fff;
+    border-color:transparent;
+    box-shadow:0 6px 14px rgba(232,84,69,.32);
+  }
   .envelope{
     background:var(--paper);
     border:1px solid rgba(92,42,62,.12);
@@ -330,6 +356,10 @@
 <main>
 
   <div id="view-landing">
+    <div class="mode-picker" id="modePicker">
+      <button class="mode-btn active" id="modeWriteBtn">✏️ Escribir una pista</button>
+      <button class="mode-btn" id="modeReadBtn">👁️ Ver tableros</button>
+    </div>
     <div class="grid" id="grid"></div>
   </div>
 
@@ -339,7 +369,6 @@
     </div>
     <h2 class="board-name" id="boardName"></h2>
     <p class="board-hint" id="boardHint">Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.</p>
-    <button class="back-btn" id="viewOnlyToggle" style="padding-left:0;">👁️ Solo ver (sin escribir) →</button>
 
     <div class="tabs">
       <button class="tab-btn active" data-type="pista">🔍 Pistas</button>
@@ -425,8 +454,9 @@ const viewBoard = document.getElementById('view-board');
 const boardNameEl = document.getElementById('boardName');
 const boardHint = document.getElementById('boardHint');
 const composerBox = document.getElementById('composer');
-const viewOnlyToggle = document.getElementById('viewOnlyToggle');
-let viewOnlyMode = false;
+const modeWriteBtn = document.getElementById('modeWriteBtn');
+const modeReadBtn = document.getElementById('modeReadBtn');
+let landingMode = 'write'; // 'write' o 'read', elegido en la pantalla de inicio
 const notesEl = document.getElementById('notes');
 const textInput = document.getElementById('textInput');
 const linkInput = document.getElementById('linkInput');
@@ -452,30 +482,37 @@ function renderGrid(){
   });
 }
 
+modeWriteBtn.addEventListener('click', () => {
+  landingMode = 'write';
+  modeWriteBtn.classList.add('active');
+  modeReadBtn.classList.remove('active');
+});
+
+modeReadBtn.addEventListener('click', () => {
+  landingMode = 'read';
+  modeReadBtn.classList.add('active');
+  modeWriteBtn.classList.remove('active');
+});
+
 function openBoard(name){
   currentBoard = name;
   boardNameEl.textContent = 'Para ' + name;
   viewLanding.style.display = 'none';
   viewBoard.style.display = 'block';
-  setViewOnly(false);
+  setViewOnly(landingMode === 'read');
   window.scrollTo({top:0, behavior:'smooth'});
   loadNotes();
 }
 
 function setViewOnly(on){
-  viewOnlyMode = on;
   if (on){
     composerBox.style.display = 'none';
     boardHint.textContent = 'Esto es lo que le han dejado hasta ahora 👀';
-    viewOnlyToggle.textContent = '✏️ Quiero escribir algo →';
   } else {
     composerBox.style.display = 'block';
     boardHint.textContent = 'Escribe algo bonito, misterioso o gracioso. Puede ser texto, un link de canción, o una imagen.';
-    viewOnlyToggle.textContent = '👁️ Solo ver (sin escribir) →';
   }
 }
-
-viewOnlyToggle.addEventListener('click', () => setViewOnly(!viewOnlyMode));
 
 
 backBtn.addEventListener('click', () => {
